@@ -2,17 +2,18 @@ import socket
 import logging
 import threading
 
-def send_data():
+def send_data(nama="kosong"):
+    logging.warning(f"thread {nama}")
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     logging.warning("membuka socket")
 
-    server_address = ('localhost', 45000)
+    server_address = ('172.18.0.5', 45000)
     logging.warning(f"opening socket {server_address}")
     sock.connect(server_address)
 
     try:
         # Send data
-        message = 'TIME {chr(13)} {chr(10)}'
+        message = 'TIME\r\n'
         logging.warning(f"[CLIENT] sending {message}")
         sock.sendall(message.encode('utf-8'))
         # Look for the response
@@ -27,8 +28,8 @@ def send_data():
 if __name__=='__main__':
     threads = []
     for i in range(10):
-        t = threading.Thread(target=send_data)
+        t = threading.Thread(target=send_data, args=(i,))
         threads.append(t)
-        
-    for t in threads:
-        t.start()
+
+    for thr in threads:
+        thr.start()

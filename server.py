@@ -12,9 +12,9 @@ class ProcessTheClient(threading.Thread):
     def run(self):
         while True:
             data = self.connection.recv(1024).decode('utf-8')
-            if data.startswith("TIME") and data.endswith(chr(13) + chr(10)):
+            if data.startswith("TIME") and data.endswith("\r\n"):
                 current_time = time.strftime("%H:%M:%S")
-                response = f"TIME {current_time} {chr(13)} {chr(10)}"
+                response = f"TIME {current_time}\r\n"
                 self.connection.sendall(response.encode('utf-8'))
             else:
                 break
